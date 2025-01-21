@@ -1,10 +1,12 @@
 def solution(s):
-    answer = 0
     arr = s.split()
-    for i in range(len(arr)-1):
-        if arr[i]!="Z":
-            if arr[i+1]!="Z":
-                answer+=int(arr[i])
-    if arr[len(arr)-1]!="Z":
-        answer+=int(arr[len(arr)-1])
-    return answer
+    stack = []
+    
+    for value in arr:
+        if value == "Z":
+            if stack:  # 스택에 값이 있을 때만 취소
+                stack.pop()
+        else:
+            stack.append(int(value))
+    
+    return sum(stack)
