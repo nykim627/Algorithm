@@ -34,7 +34,7 @@ public class Solution {
 							max = len;
 							break Loop;
 						}
-						isPal = true;
+						isPal = true; //이거빼먹음ㅠㅠㅠ
 						for(int k=0;k<len/2;k++) { //세로회문체크
 							if(charArr[k+j][i] != charArr[len-1-k+j][i]) {
 								isPal = false;
