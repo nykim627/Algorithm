@@ -34,26 +34,19 @@ public class Solution {
 				}
 			}
 			
-			String[] ans = new String[n]; //결과저장배열
-			
-			int idx = 0; //결과저장배열의 인덱스
+			//결과 출력
+			System.out.print("#"+tc);
 			if(arr.length%2==0) { //전체카드 크기가 짝수면
 				for(int i=0;i<len;i++) { //처음부터 차곡차곡
-					ans[idx++] = subArr1[i];
-					ans[idx++] = subArr2[i];
+					System.out.print(" "+subArr1[i]);
+					System.out.print(" "+subArr2[i]);
 				}
 			}else { //홀수면
 				for(int i=0;i<len-1;i++) { //두번째 카드덱 크기만큼 for문 돌고
-					ans[idx++] = subArr1[i];
-					ans[idx++] = subArr2[i];
+					System.out.print(" "+subArr1[i]);
+					System.out.print(" "+subArr2[i]);
 				}
-				ans[idx++] = subArr1[len-1]; //마지막에 첫번째 카드덱의 가장 마지막 카드 붙여주기
-			}
-			
-			//결과 출력
-			System.out.print("#"+tc);
-			for(int i=0;i<n;i++) {
-				System.out.print(" "+ans[i]);
+				System.out.print(" "+subArr1[len-1]); //마지막에 첫번째 카드덱의 가장 마지막 카드 붙여주기
 			}
 			System.out.println();
 			
