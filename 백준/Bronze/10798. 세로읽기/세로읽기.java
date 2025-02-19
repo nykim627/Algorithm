@@ -1,27 +1,36 @@
+//package Week3.problem;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class Main {
-
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
+        //세로읽기
         Scanner sc = new Scanner(System.in);
-        String[][] arr = new String[15][5];  
 
+        String[][] arr = new String[5][15]; //최대 15개의 글자이므로 최대길이로 설정
+
+        //입력
         for(int i=0;i<5;i++){
-            String[] arr2 = sc.next().split("");
-            for(int j=0;j<arr2.length;j++){
-                arr[j][i] = arr2[j];
+            String tmp = sc.next(); //문자열 입력받음
+            for(int j=0;j<tmp.length();j++){ //입력받은 문자열의 문자를 하나씩 집어넣음
+                arr[i][j] = Character.toString(tmp.charAt(j)); //
             }
         }
 
-        String str = "";
-        for(int i=0;i<15;i++){
-            for(int j=0;j<5;j++){
-                if(arr[i][j]!=null){
-                    str += arr[i][j];
+        for(int c=0;c<15;c++){ //열고정 
+            for(int r=0;r<5;r++){ //행순회
+                if(arr[r][c]!=null){ //값이 기본값인 null이면 입력되지 않은 것이므로 출력하지 않음
+                    System.out.print(arr[r][c]);
                 }
             }
         }
-        System.out.println(str);
+
+
+
 
     }
 }
