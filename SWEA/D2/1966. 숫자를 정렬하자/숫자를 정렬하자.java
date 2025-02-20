@@ -13,34 +13,28 @@ public class Solution {
 			int n = sc.nextInt(); // 숫자열 길이 n
 
 			LinkedList<Integer> list = new LinkedList<>();
-			int[] arr = new int[n];
 
 			// 값 입력
 			for (int i = 0; i < n; i++) {
-//            	list.add(sc.nextInt());
-				arr[i] = sc.nextInt();
+            	list.add(sc.nextInt());
 			}
 
 			// 선택 정렬
 			for (int i = 1; i < n; i++) { // 정렬하고 싶은 값(key) 순회
-//            	int key = list.get(i);
-//            	for(int j=i-1;j>=0&&key<list.get(j);j--) {
-//            		if(key>list.get(j)) {
-//            			list
-//            		}
-//            	}
 				int j; //정렬 포인트
-				int key = arr[i];
-				for (j = i - 1; j >= 0 && key < arr[j]; j--) {
-					arr[j + 1] = arr[j];
-				}
-				arr[j+1] = key;
+            	int key = list.get(i);
+            	for( j=i-1;j>=0&&key<list.get(j);j--) {
+            		list.add(j+1,list.get(j)); //j+1번째에 값 추가했으므로
+            		list.remove(j+2); //기존의 j+1번째 값이 그 다음으로 밀림. 이걸 삭제하기.
+            	}
+            	list.add(j+1,key);
+            	list.remove(j+2);
 			}
 
 			// 결과 출력
 			System.out.print("#" + tc + " ");
 			for(int i=0;i<n;i++) {
-				System.out.print(arr[i]+" ");
+				System.out.print(list.get(i)+" ");
 			}
 			System.out.println();
 		} // tc순회 끝
