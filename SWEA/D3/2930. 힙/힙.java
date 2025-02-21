@@ -1,37 +1,46 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Solution {
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-
-		int T = sc.nextInt(); // tc수
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+		
+		int T = Integer.parseInt(br.readLine()); // tc수
 
 		for (int tc = 1; tc <= T; tc++) {
-			int n = sc.nextInt(); // 수행해야하는 연산의 수(1<=n<=10^5)
-			sc.nextLine();
-			PriorityQueue<Integer> pq = new PriorityQueue<>();
+			int n = Integer.parseInt(br.readLine()); // 수행해야하는 연산의 수(1<=n<=10^5)
+			PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->b-a); //최대힙 두현 위한 비교기준
 
-			System.out.print("#" + tc+ " ");
+			bw.write("#" + tc+ " ");
 			
 			for (int i = 0; i < n; i++) { // 연산 정보 입력
-				String[] order = sc.nextLine().split(" ");
-				if (order[0].equals("1")) { // 연산1
-					int num = Integer.parseInt(order[1]);
-					pq.add(-num); // 최대힙 구현 위해 음수로 변환
-				} else if(order[0].equals("2")) { // 연산2
-					if (pq.isEmpty()) {
-						System.out.print(-1 + " ");
+				StringTokenizer st = new StringTokenizer(br.readLine());
+				int order = Integer.parseInt(st.nextToken());
+				if (order==1) { // 연산1
+					int num = Integer.parseInt(st.nextToken());
+					pq.add(num); 
+				} else if(order==2) { // 연산2
+					//결과 출력
+					if (pq.isEmpty()) { //힙이 비어있는지 확인
+						bw.write(-1 + " "); //연산 끝나기 전까진 끝난 게 아니다~~
 					} else {
-						System.out.print(-pq.poll() + " ");
+						bw.write(pq.poll() + " ");
 					}
 				}
 			}
 			
-			System.out.println();
-
-			// 결과 출력
-//			System.out.println("#" + tc + " " + sum);
+			bw.newLine(); //bw.write("\n");과 동일
+			
 		} // tc순회 끝
+		
+		bw.flush(); 
+		br.close();
+		bw.close();
 	}
 }
