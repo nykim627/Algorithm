@@ -1,9 +1,6 @@
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Solution {
@@ -13,8 +10,6 @@ public class Solution {
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-		StringBuilder sb = new StringBuilder();
 
 		int T = Integer.parseInt(br.readLine()); // tc수
 
@@ -39,12 +34,15 @@ public class Solution {
 				}
 				tree[c][2] = p; // 부모저장
 			}
+			
 
-			// 정점마다 정보 확인
+			// 정점마다 정보 확인 - 이후에 주석 처리
 //			for(int i=0; i<v+1; i++) {
 //				System.out.println(i + " : " + Arrays.toString(tree[i]));
 //			}
 			
+			
+			//방문배열 만들기 -> 강사님 코드~~
 //			boolean[] visit = new boolean[v+1];
 //			
 //			visit[5] = true;
@@ -52,7 +50,8 @@ public class Solution {
 //			if (visit[i]) {
 //				return i;
 //			}
-
+			
+			
 			// 공통 조상 찾기 => 재귀로 만들수 있나...?
 			int[] cnt = new int[v + 1]; // 정점 방문여부 저장 배열
 			// a의 조상 찾기
@@ -80,17 +79,8 @@ public class Solution {
 			subTreeSize = 0; //서브트리 크기 초기화
 			inOrder(cp);
 			System.out.println("#"+tc+" "+cp+" "+subTreeSize);
-			
-			
-
-//			sb.append("\n"); // 개행문자 추가
-//			bw.write(sb.toString()); // 최종결과출력
-
+	
 		} // tc순회 끝
-//
-//		bw.flush();
-//		br.close();
-//		bw.close();
 	}
 	
 	public static void inOrder(int v) {
