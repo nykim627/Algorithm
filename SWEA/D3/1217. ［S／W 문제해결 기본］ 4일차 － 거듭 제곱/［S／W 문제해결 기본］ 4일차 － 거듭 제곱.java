@@ -1,33 +1,35 @@
+
 import java.util.Scanner;
 
 public class Solution {
+	static int N;
+	static int M;
+	
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        int t = 10; //tc 개수
-
-        for(int tc=1;tc<=t;tc++){ //tc반복
-            int tcNum = sc.nextInt();
-
-            int n = sc.nextInt();
-            int m = sc.nextInt();
-
-            //결과 출력
-            int ans = power(n,m); //결과 값은 Integer 범위를 넘어가지 않는다.
-            System.out.println("#"+tcNum+" "+ans);
-        }//tc순회끝
-
-        sc.close();
-    }//main끝
-
-    static int power(int n,int m){
-        if(m==0){ //기본부분
-            return 1;
-        }
-        else{
-            return power(n,m-1) * n; //재귀부분
-        }
-    }
-
-
+		//거듭제곱 함수를 재귀호출을 이용하여 구현하라.
+    	Scanner sc = new Scanner(System.in);
+		
+		int T = 10;
+		for(int tc=1;tc<=T;tc++) {
+			int tcNum = sc.nextInt();
+			N = sc.nextInt();
+			M = sc.nextInt();
+			
+			System.out.println("#"+tcNum+" "+pow(N,M)); //결과출력
+		}//tc순회끝
+	}//main
+    
+    static int pow(int n, int m) {
+    	//종료조건
+    	if(m==0) return 1;
+    	
+    	//재귀부분
+    	if(m%2==0) {
+    		int tmp = pow(n,m/2);
+    		return tmp*tmp;
+    	}else {
+    		int tmp = pow(n,m/2);
+    		return tmp*tmp*n;
+    	}
+    }//pow
 }
