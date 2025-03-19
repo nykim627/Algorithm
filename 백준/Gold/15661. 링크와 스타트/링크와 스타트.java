@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 //B15661 링크와 스타트
-//메모리 kb, 시간 ms
+//메모리 255140kb, 시간 984ms
 public class Main {
     static int[][] arr;
     static int N;
@@ -16,7 +16,7 @@ public class Main {
     static int min;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+//        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         N = Integer.parseInt(br.readLine());
         arr = new int[N][N];
@@ -59,9 +59,11 @@ public class Main {
             start = new ArrayList<>();
         }
 
-        bw.write(min+"");
-        bw.flush();
-        bw.close();
+        System.out.println(min);
+
+//        bw.write(min+"");
+//        bw.flush();
+//        bw.close();
         br.close();
     }//main
 }
