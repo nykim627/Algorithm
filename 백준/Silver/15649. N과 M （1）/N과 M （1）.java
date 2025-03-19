@@ -7,10 +7,10 @@ public class Main {
     static int M;
     static boolean[] visited;
     static int[] sel;
+    static StringBuilder sb;
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
         StringTokenizer st = new StringTokenizer(br.readLine());
 
@@ -18,18 +18,19 @@ public class Main {
         M = Integer.parseInt(st.nextToken());
         visited = new boolean[N+1]; //N까지의 자연수에 대한 방문배열
         sel = new int[M]; //뽑은 M개 수 저장
+        sb = new StringBuilder();
         perm(0);
-        bw.flush();
-        bw.close();
+        System.out.println(sb.toString());
+
         br.close();
     }//main
 
     static void perm(int m){
         if(m==M){ //sel에 M개 수 다 채워지면 출력
             for(int e: sel){
-                System.out.print(e+" ");
+                sb.append(e).append(" ");
             }
-            System.out.println();
+            sb.append("\n");
             return;
         }
         for(int i=1;i<=N;i++){
