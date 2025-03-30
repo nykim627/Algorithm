@@ -1,18 +1,12 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
 
 
 public class Solution {
     static int N; //섬의 개수
-    static int[] p;
-    static List<int[]> combs;
-    static int[] sel = new int[2]; //조합에서 선택된 배열
-
+    static List<Edge>[] adj;
 
     public static class Island{
         int x, y;
@@ -32,27 +26,25 @@ public class Solution {
     }
 
     public static class Edge implements Comparable<Edge> {
-        int a, b; //섬 두 개의 비용과 환경부담금
+        int to; //다음 섬의 번호와 환경부담금
         double cost;
 
-        Edge(int a, int b, double cost){
-            this.a = a;
-            this.b = b;
+        Edge(int to, double cost){
+            this.to = to;
             this.cost = cost;
         }
 
         @Override
         public String toString() {
             return "Edge{" +
-                    "a=" + a +
-                    ", b=" + b +
+                    "to=" + to +
                     ", cost=" + cost +
                     '}';
         }
 
         @Override
         public int compareTo(Edge o) {
-            return Double.compare(this.cost, o.cost);
+            return Double.compare(this.cost,o.cost);
         }
     }
 
@@ -80,75 +72,43 @@ public class Solution {
             double E = Double.parseDouble(br.readLine()); //마지막에 환경부담세율 E 입력받음
             //입력받기 끝
 
-
+            adj = new ArrayList[N];
             for(int i=0;i<N;i++){
-                islands[i] = new Island(xs[i],ys[i]);
-            }//섬의 좌표 채우기
-            combs = new ArrayList<>();
-            comb(0,0); //가능한 모든 조합 탐색 후 combs에 넣기
-//            for(int i=0;i< combs.size();i++){
-//                System.out.print(Arrays.toString(combs.get(i))+" ");
-//            }
-            Edge[] edges = new Edge[combs.size()];
-            for(int i=0;i<combs.size();i++){
-                int[] e = combs.get(i);
-                int a = e[0]; int b = e[1];
-                long squareL = (long) (islands[a].x - islands[b].x) *(islands[a].x - islands[b].x)+ (long)(islands[a].y - islands[b].y) *(islands[a].y-islands[b].y);
-//                System.out.println(squareL);
-                double cost = E * (double) squareL;
-                edges[i] = new Edge(a,b,cost);
-            }//간선 배열 채우기
+                adj[i] = new ArrayList<>();
+            }//초기화
 
-            Arrays.sort(edges); //간선배열 환경부담금 기준 오름차순 정렬
-//            System.out.println(Arrays.toString(edges));
-
-            double sum = 0;
-            p = new int[N];
-            for(int i=0;i<N;i++){
-                p[i] = i; //makeset 잊지마!!
-            }
-            for(int i=0, pick=0;i<edges.length && pick<N-1;i++){
-                int px = findset(edges[i].a);
-                int py = findset(edges[i].b);
-                if(px!=py) {
-                    pick++;
-                    sum += edges[i].cost;
-                    union(px,py);
+            for(int i=0;i<N;i++){ //출발섬
+                for(int j=i+1;j<N;j++){ //도착섬
+                    double cost = E * (Math.pow(xs[i]-xs[j],2)+Math.pow(ys[i]-ys[j],2));
+                    adj[i].add(new Edge(j,cost));
+                    adj[j].add(new Edge(i,cost)); //무향이므로
                 }
+            }//그래프 표현 끝!
+
+            double ans = 0;
+            PriorityQueue<Edge> pq = new PriorityQueue<>();
+            boolean[] visited = new boolean[N];
+            int pick = 0;
+            pq.add(new Edge(0,0));
+            while(pick<N){
+                Edge e = pq.poll();
+//                System.out.println(e.toString());
+                if(visited[e.to]) continue;
+                ans += e.cost;
+                visited[e.to] = true;
+                pick++;
+                pq.addAll(adj[e.to]);
             }
 
-            long ans = Math.round(sum);
+            long res = Math.round(ans);
 
-            sb.append(ans).append("\n");
+            sb.append(res).append("\n");
 
         }//tc끝
 
         System.out.println(sb.toString());
 
     }//main
-
-    static void comb(int n, int m){
-        if(m==2){
-            int[] tmp = Arrays.copyOf(sel,2);
-            combs.add(tmp); return;
-        }
-        if(n>=N) return;
-
-        sel[m] = n;
-        comb(n+1,m+1); //뽑
-        comb(n+1,m); //안뽑
-    }
-
-    static void union(int x, int y){
-        p[y] = x;
-    }
-
-    static int findset(int x){
-        if(x!=p[x]){
-            p[x] = findset(p[x]);
-        }
-        return p[x];
-    }
 
 
 }
