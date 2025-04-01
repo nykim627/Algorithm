@@ -2,13 +2,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
+import java.util.Stack;
 import java.util.StringTokenizer;
 
 public class Solution {
+	static Stack<Integer> stack;
+	static int V, E;
+	static List<Integer>[] adj; 
+	static int[] degree;
+	static boolean[] visited;
+
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
@@ -20,14 +24,14 @@ public class Solution {
 			sb.append("#").append(tc).append(" ");
 			
 			StringTokenizer st = new StringTokenizer(br.readLine());
-			int V = Integer.parseInt(st.nextToken()); //정점개수
-			int E = Integer.parseInt(st.nextToken()); //간선 수
+			V = Integer.parseInt(st.nextToken()); //정점개수
+			E = Integer.parseInt(st.nextToken()); //간선 수
 			
-			List<Integer>[] adj = new ArrayList[V+1];
+			adj = new ArrayList[V+1];
 			for(int i=1;i<=V;i++) {
 				adj[i] = new ArrayList<>();
 			}//초기화 완료
-			int[] degree = new int[V+1];
+			degree = new int[V+1];
 			
 			st = new StringTokenizer(br.readLine());
 			for(int i=0;i<E;i++) {
@@ -41,18 +45,14 @@ public class Solution {
 //			System.out.println(Arrays.toString(adj));
 //			System.out.println(Arrays.toString(degree));
 			
-			Queue<Integer> q = new LinkedList<>();
+			visited = new boolean[V+1];
+			stack = new Stack<>();
 			for(int i=1;i<=V;i++) {
-				if(degree[i]==0) q.add(i);
-			}//처음에 진입노드 개수가 0인 애들 큐에 넣기
+				if(degree[i]==0) dfs(i);
+			}//처음에 진입노드 개수가 0인 애들 스택에 넣기
 			
-			while(!q.isEmpty()) {
-				int curr = q.poll();
-				sb.append(curr).append(" ");
-				for(int next: adj[curr]) {
-					degree[next]--;
-					if(degree[next]==0) q.add(next);
-				}
+			while(!stack.isEmpty()) {
+				sb.append(stack.pop()).append(" ");
 			}
 			
 			sb.append("\n");
@@ -60,6 +60,15 @@ public class Solution {
 		}//tc
 		
 		System.out.println(sb.toString());
+		
+	}
+
+	private static void dfs(int v) {
+		visited[v] = true;
+		for(int e: adj[v]) {
+			if(!visited[e]) dfs(e);
+		}
+		stack.push(v);
 		
 	}
 }
