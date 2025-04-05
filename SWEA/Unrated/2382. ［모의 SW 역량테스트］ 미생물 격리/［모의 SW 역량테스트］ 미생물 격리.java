@@ -83,21 +83,6 @@ public class Solution {
                         nextnum[nr][nc] += num[r][c];
                     }
                 }
-//                for(int r=0;r<N;r++){
-//                    for(int c=0;c<N;c++){
-//                        if(dir[r][c]==0) continue; //군집 없는 칸은 패스
-//                        int nr = r + dr[dir[r][c]];
-//                        int nc = c + dc[dir[r][c]];
-//                        if(nr==0||nc==0||nr==N-1||nc==N-1){
-//                            nextdir[nr][nc] = dir[r][c]%2==1 ? dir[r][c]+1 : dir[r][c]-1;
-//                            nextnum[nr][nc] = num[r][c]/2;
-//                            if(nextnum[nr][nc]==0) nextdir[nr][nc]=0; //군집사라짐
-//                        }else{
-//                            if(nextnum[nr][nc] < num[r][c]) nextdir[nr][nc] = dir[r][c]; //군집 없는 칸에 군집 오거나, 있는 칸에 더 많은 군집 와서 방향 바뀌거나
-//                            nextnum[nr][nc] += num[r][c];
-//                        }
-//                    }
-//                }
                 num = deepCopy(num, nextnum);
                 dir = deepCopy(dir, nextdir);
                 for(int r=0;r<N;r++){
