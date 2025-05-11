@@ -1,27 +1,30 @@
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        //나머지
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        int[] count = new int[42]; //0~41까지의 나머지를 저장하는 카운팅 배열
+		//카운트배열에 나머지로 나오는 값 ++하고 1이상인 인덱스 개수 세기
+		int[] cnt = new int[42];
+		for(int i=1;i<=10;i++) {
+			int tmp = Integer.parseInt(br.readLine())%42;
+			cnt[tmp]++;
+		}
+		
+		int res=0;
+		for(int i=0;i<42;i++) {
+			if(cnt[i]>0) res++;
+		}
+		System.out.println(res);
 
-        for(int i=0;i<10;i++){
-            int n = sc.nextInt();
-            count[n%42]++;
-        }
+		br.close();
 
-        int cnt = 0; //서로 다른 나머지가 몇개 있는지
-        for(int i=0;i<42;i++){
-            if (count[i] != 0) {
-                cnt++;
-            }
-        }
-        System.out.println(cnt);
-
-        sc.close();
-    }//main끝
+	}
 }
