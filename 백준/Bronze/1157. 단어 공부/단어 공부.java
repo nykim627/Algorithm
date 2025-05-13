@@ -1,42 +1,38 @@
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Scanner;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		Scanner sc = new Scanner(System.in);
-		
-		String str = sc.next(); //문자열 입력
-		int[] count = new int[26]; //알파벳 카운팅배열
-		
-		for(int i=0;i<str.length();i++) {
-			if(str.charAt(i)>='A' && str.charAt(i)<='Z') { //대문자면
-				count[str.charAt(i)-'A']++; //'A'뺀 카운티배열 인덱스의 값 +1
-			}else if(str.charAt(i)>='a' && str.charAt(i)<='z') { //소문자면
-				count[str.charAt(i)-'a']++; //'a'뺀 카운티배열 인덱스의 값 +1
-			}
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		int[] arr = new int[26];
+		String input = br.readLine().toUpperCase();
+		for(int i=0;i<input.length();i++) {
+			char tmp = input.charAt(i);
+			arr[tmp-'A']++;
 		}
 		
-		int max = -1;
-		int maxIdx = 0;
-		boolean isOnly = true;
-		for(int i=0;i<count.length;i++) {
-			if(max<count[i]) { //최빈값 찾기
-				max = count[i];
-				maxIdx = i;
+		int max = Integer.MIN_VALUE;
+		for(int i=0;i<26;i++) {
+			max = Math.max(arr[i],  max);
+		}
+		int cnt = 0;
+		int idx = -1;
+		for(int i=0;i<26;i++) {
+			if(arr[i]==max) {
+				cnt++;
+				idx = i;
 			}
 		}
-		
-		for(int i=0;i<count.length;i++) {
-			if(count[i]==max && i!=maxIdx) { //최빈값이 여러개 존재하는 경우 판별
-				isOnly = false;
-				break;
-			}
-		}
-		
-		if(isOnly==false){
-			System.out.println("?");
+		if(cnt==1) {
+			System.out.println((char)(idx+'A'));
 		}else {
-			System.out.println((char)(maxIdx+'A')); //int -> char 형변환
+			System.out.println("?");
 		}
+		
+		br.close();
+
 	}
 }
