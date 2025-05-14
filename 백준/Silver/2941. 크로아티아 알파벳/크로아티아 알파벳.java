@@ -1,24 +1,41 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        //크로아티아 알파벳
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-        String str = sc.next();
-        String[] arr = {"c=","c-","dz=","d-","lj","nj","s=","z="}; //특수 크로아티아 알파벳 배열
+		String input = br.readLine();
+		if(input.contains("c=")) {
+			input = input.replace("c=", "*");
+		}
+		if(input.contains("c-")) {
+			input = input.replace("c-", "*");
+		}
+		if(input.contains("dz=")) {
+			input = input.replace("dz=","*");
+		}
+		if(input.contains("d-")) {
+			input = input.replace("d-", "*");
+		}
+		if(input.contains("lj")) {
+			input = input.replace("lj", "*");
+		}
+		if(input.contains("nj")) {
+			input = input.replace("nj", "*");
+		}
+		if(input.contains("s=")) {
+			input = input.replace("s=", "*");
+		}
+		if(input.contains("z=")) {
+			input = input.replace("z=", "*");
+		}
+		
+		System.out.println(input.length());
+		
+		br.close();
 
-        for(String e: arr){
-            if(str.contains(e)) {
-                //특수 크아 알파벳이면 *로 대체(대체문자는 어떤것이든 상관없음)
-                str = str.replace(e, "*"); //결과를 str에 업데이트해줘야함
-            }
-        }
-
-        //결과 출력
-        System.out.println(str.length());
-
-        sc.close();
-    }//main끝
+	}
 }
