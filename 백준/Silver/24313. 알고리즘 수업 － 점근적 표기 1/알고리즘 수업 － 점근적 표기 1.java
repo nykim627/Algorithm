@@ -12,19 +12,13 @@ public class Main{
         int c = Integer.parseInt(br.readLine());
         int n0 = Integer.parseInt(br.readLine());
         
-        int res = 0;
-        if(c-a==0) {
-        	if(b<=0) {
-        		res = 1;
-        	}
-        }else if(c-a>0) {
-        	if(b<=0) {
-        		res = 1;
-        	}else {
-        		if(b/(c-a)<=n0) {
-        			res = 1;
-        		}
-        	}
+        int res = 1;
+        if(a*n0+b > c*n0) {
+        	res = 0;
+        }else if(a>c) {
+        	res = 0;
+        }else {
+        	res = 1;
         }
         
         System.out.println(res);
