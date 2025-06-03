@@ -1,24 +1,26 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
-public class Main {
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int result = 0; //생성자가 없는 경우 0 출력
-
-        for(int i=1;i<=n;i++){
-            int sum = 0; //자리수 합 저장하기
-            int tmp = i;
-            while(tmp!=0){
-                sum += tmp%10; // 각 자리수 더하기
-                tmp = tmp/10;
-            }
-            // 가장 작은 생성자를 찾은 경우
-            if(i+sum==n){
-                result = i;
-                break;
-            }
+public class Main{
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        int N = Integer.parseInt(br.readLine()); //분해합
+        int sum = 0;
+        int num = 0;
+        for(int i=1;i<N;i++) {
+        	sum = i;
+        	int tmp = i;
+        	while(tmp!=0) {
+        		sum += tmp%10;
+        		tmp /= 10;
+        	}
+        	if(sum==N) {
+        		num = i;
+        		break;
+        	}
         }
-        System.out.println(result);
+        
+        System.out.println(num);
     }
 }
