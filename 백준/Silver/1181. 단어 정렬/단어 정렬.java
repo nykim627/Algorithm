@@ -20,13 +20,16 @@ public class Main{
 		}
 		
 		Arrays.sort(arr, (cur,pos)->{
-			if(cur.length()==pos.length()) return cur.compareTo(pos);
+			if(cur.length()==pos.length()) return cur.compareTo(pos); //사전순 정렬
 			return cur.length()-pos.length();
 		});
 		
+		StringBuilder sb = new StringBuilder();
 		for(String e: arr) {
-			System.out.println(e);
+			sb.append(e).append("\n");
 		}
+		
+		System.out.println(sb.toString());
 		
 	}
 }
