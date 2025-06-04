@@ -1,30 +1,32 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
-public class Main {
+public class Main{
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        int N = Integer.parseInt(br.readLine());
+        int num = 0;
+        
+        int min = Integer.MAX_VALUE; //최소봉지개수
+        boolean isAvailable = false;
+        
+        int share = N/5;
+        for(int i=0;i<=share;i++) {
+        	int remainder = N - 5*i;
+        	num = i;
+        	if(remainder%3==0) {
+        		num += remainder/3;
+        		min = Math.min(min,  num);
+        		isAvailable = true;
+        	}
+        }
 
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-
-		int n = sc.nextInt(); // 킬로그램 수
-
-		int cntFive = n / 5;
-		int cntThree = 0;
-		boolean isOk = false;
-		while (cntFive != -1) {
-			if ((n - cntFive * 5) % 3 != 0) {
-				cntFive--;
-			} else {
-				cntThree = (n - cntFive * 5) / 3;
-				isOk = true;
-				break;
-			}
-		}
-		
-		if(isOk) {
-			System.out.println(cntFive+cntThree);
-		}else {
-			System.out.println(-1);
-		}
-	}
-
+        if(isAvailable) {
+        	System.out.println(min);        	
+        }else {
+        	System.out.println(-1);
+        }
+        
+    }
 }
