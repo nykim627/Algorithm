@@ -1,21 +1,18 @@
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
-public class Main {
-
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		int a = sc.nextInt();
-		int b = sc.nextInt();
-		int c = sc.nextInt();
-		System.out.println(a+b-c);
+public class Main{
+	
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
 		
-		String stra = Integer.toString(a);
-		String strb = Integer.toString(b);
-		String strc = Integer.toString(c);
+		int A = Integer.parseInt(br.readLine());
+		int B = Integer.parseInt(br.readLine());
+		int C = Integer.parseInt(br.readLine());
 		
-		System.out.println(Integer.parseInt(stra+strb)-Integer.parseInt(strc));
-		
+		System.out.println(A+B-C);
+		System.out.println(Integer.parseInt(A+""+B)-C);
 		
 	}
-
 }
