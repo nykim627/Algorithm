@@ -11,7 +11,8 @@ public class Main {
 	static int N, M, X;
 	static final int INF = Integer.MAX_VALUE;
 	static int[][] dist;
-	static ArrayList<Edge>[] arrList;
+	static ArrayList<Edge>[] arrListToX;
+	static ArrayList<Edge>[] arrListFromX;
 
 	public static class Edge implements Comparable<Edge> {
 		int to;
@@ -39,9 +40,11 @@ public class Main {
 		M = Integer.parseInt(st.nextToken()); // 1 ≤ M ≤ 10,000
 		X = Integer.parseInt(st.nextToken()); // 1 ≤ X ≤ N
 
-		arrList = new ArrayList[N+1];
+		arrListToX = new ArrayList[N+1];
+		arrListFromX = new ArrayList[N+1];
 		for(int i=1;i<=N;i++) {
-			arrList[i] = new ArrayList<Edge>();
+			arrListToX[i] = new ArrayList<Edge>();
+			arrListFromX[i] = new ArrayList<Edge>();
 		}
 		
 		for(int i=1;i<=M;i++) {
@@ -49,47 +52,45 @@ public class Main {
 			int from = Integer.parseInt(st.nextToken());
 			int to = Integer.parseInt(st.nextToken());
 			int cost = Integer.parseInt(st.nextToken());
-			arrList[from].add(new Edge(to, cost));
+			arrListFromX[from].add(new Edge(to, cost));
+			arrListToX[to].add(new Edge(from, cost));
 		}
 		
-		dist = new int[N+1][N+1];
-		for(int i=1;i<=N;i++) {
-			Arrays.fill(dist[i], INF);
-		}
-		for(int i=1;i<=N;i++) {
-			dijkstra(i);
-		}
+		int[] distFromX = dijkstra(arrListFromX, X);
+		int[] distToX = dijkstra(arrListToX, X);
 		
 		int max = Integer.MIN_VALUE;
 		for(int i=1;i<=N;i++) {
-			max = Math.max(max, dist[i][X]+dist[X][i]);
+			max = Math.max(max, distFromX[i]+distToX[i]);
 		}
 		
 		System.out.println(max);
 
 	}
 
-	private static void dijkstra(int start) {
+	private static int[] dijkstra(ArrayList<Edge>[] arrList, int start) {
 		PriorityQueue<Edge> pq = new PriorityQueue();
-		boolean[] visited = new boolean[N+1];
 		
-		dist[start][start] = 0;
+		int[] dist = new int[N+1];
+		Arrays.fill(dist, INF);
+		
+		dist[start] = 0;
 		pq.add(new Edge(start,0));
 		
 		while(!pq.isEmpty()) {
 			Edge curr = pq.poll();
 			
-			if(visited[curr.to]==true) continue;
-			visited[curr.to] = true;
 			
 			for(Edge e: arrList[curr.to]) {
-				if(!visited[e.to] && dist[start][e.to] > dist[start][curr.to]+ e.cost) {
-					dist[start][e.to] = dist[start][curr.to]+ e.cost;
-					pq.add(new Edge(e.to, dist[start][e.to]));
+				if(dist[e.to] > dist[curr.to]+ e.cost) {
+					dist[e.to] = dist[curr.to]+ e.cost;
+					pq.add(new Edge(e.to, dist[e.to]));
 				}
 			}
 			
 		}
+		
+		return dist;
 		
 		
 	}
