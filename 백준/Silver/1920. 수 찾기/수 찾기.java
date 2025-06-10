@@ -1,38 +1,43 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-    public static void main(String[] args) throws IOException {  //입출력 예외 처리
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	static boolean[] visited;
+	static int num=0;
+	static int[] order;
+	static ArrayList<Integer>[] arrList;
+	static int V, E, R;
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
 
-        int n = Integer.parseInt(br.readLine()); // 모든 정수의 범위가 2^(-31) ~ 2^(31)이므로 정수 타입을 int로 지정
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        
-        // 빠른 검색을 위해 HashSet으로 배열 생성
-        HashSet<Integer> set = new HashSet<>();
-        for (int i = 0; i < n; i++) {
-            set.add(Integer.parseInt(st.nextToken()));
-        }
+		int N = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int[] arr = new int[N];
+		for(int i=0;i<N;i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
+		Arrays.sort(arr);
+		
+		int M = Integer.parseInt(br.readLine());
+		st = new StringTokenizer(br.readLine());
+		for(int i=0;i<M;i++) {
+			int num = Arrays.binarySearch(arr, Integer.parseInt(st.nextToken()));
+			if(num>=0) {
+				sb.append("1\n");
+			}else {
+				sb.append("0\n");
+			}
+		}
+		
+		System.out.println(sb.toString());
+	}
 
-        int m = Integer.parseInt(br.readLine()); // 모든 정수의 범위가 2^(-31) ~ 2^(31)이므로 정수 타입을 int로 지정
-        st = new StringTokenizer(br.readLine()); // st를 초기화
-        
-        // m개의 각 원소에 대해 set에서 존재 여부를 확인
-        for (int i = 0; i < m; i++) {
-            int num = Integer.parseInt(st.nextToken());
-            if (set.contains(num)) {
-                System.out.println(1);  // 존재하면 1 출력
-            } else {
-                System.out.println(0);  // 존재하지 않으면 0 출력
-            }
-        }
-    }
 }
