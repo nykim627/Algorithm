@@ -1,29 +1,33 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) throws NumberFormatException{
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int k = sc.nextInt();
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
+		System.out.println(fact(N)/(fact(K)*fact(N-K)));
+	}
+	
+	static int fact(int n) {
+		if(n==0) {
+			return 1;
+		}
+		if(n==1) {
+			return 1;
+		}
+		return fact(n-1) * n;
+	}
+	
 
-        int sum_n=1;
-        int sum_k=1;
-        int sum_n_k=1;
-
-        for(int i=1;i<=k;i++){
-            sum_k*=i;
-        }
-        for(int i=1;i<=n;i++){
-            sum_n*=i;
-        }
-        for(int i=1;i<=n-k;i++){
-            sum_n_k*=i;
-        }
-
-        int total = sum_n/sum_k;
-        int total2 = total/sum_n_k;
-
-        System.out.println(total2);
-    }
 }
