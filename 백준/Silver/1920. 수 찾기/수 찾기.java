@@ -29,15 +29,28 @@ public class Main {
 		int M = Integer.parseInt(br.readLine());
 		st = new StringTokenizer(br.readLine());
 		for(int i=0;i<M;i++) {
-			int num = Arrays.binarySearch(arr, Integer.parseInt(st.nextToken()));
-			if(num>=0) {
-				sb.append("1\n");
-			}else {
-				sb.append("0\n");
-			}
+			int res = binarySearch(arr, Integer.parseInt(st.nextToken()));
+			sb.append(res).append("\n");
 		}
 		
 		System.out.println(sb.toString());
+	}
+	
+	static int binarySearch(int[] arr, int k) {
+		int left = 0;
+		int right = arr.length-1;
+		while(left<=right) {
+			int mid = (left+right)/2;
+			
+			if(k==arr[mid]) {
+				return 1;
+			}else if(k<arr[mid]) {
+				right = mid-1;
+			}else {
+				left = mid+1;
+			}
+		}
+		return 0;
 	}
 
 }
