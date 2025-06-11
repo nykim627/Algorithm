@@ -9,25 +9,26 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 
+		int[][] dp = new int[30][30];
+		
+		for(int n=0;n<30;n++) {
+			for(int r=0;r<=n;r++) {
+				if(r==0||r==n) {
+					dp[n][r] = 1;
+				}else {
+					dp[n][r] = dp[n-1][r-1] + dp[n-1][r];
+				}
+			}
+		}
+		
 		int T = Integer.parseInt(br.readLine());
 		for(int tc=1;tc<=T;tc++) {
 			StringTokenizer st = new StringTokenizer(br.readLine());
 			int N = Integer.parseInt(st.nextToken());
 			int M = Integer.parseInt(st.nextToken());
-			sb.append(fact(M).divide(fact(N).multiply(fact(M-N)))).append("\n");
+			sb.append(dp[M][N]).append("\n");
 		}
 		System.out.println(sb.toString());
-	}
-	
-	static BigInteger fact(int n) {
-		if(n==0) {
-			return new BigInteger("1");
-		}
-		if(n==1) {
-			return new BigInteger("1");
-		}
-		return fact(n-1).multiply(new BigInteger(String.valueOf(n)));
-		
 	}
 	
 
