@@ -1,48 +1,36 @@
-
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Main {
-    static StringBuilder sb;
-    static int N;
-    static int len;
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        while(true){
-            sb = new StringBuilder();
-            String tmp = br.readLine();
-            if(tmp==null || tmp.isEmpty()){
-                break;
-            }
-            N = Integer.parseInt(tmp);
-            len = (int)Math.pow(3,N);
-            for(int i=0;i<len;i++){
-                sb.append("-");
-            }
-//            System.out.println("before divideConquer: "+sb.toString());
+	static StringBuilder sb;
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		String str = "";
+		while((str = br.readLine()) != null) {
+			int N = Integer.parseInt(str);
+			int len = (int) Math.pow(3, N);
+			sb = new StringBuilder("-".repeat(len));
+			divide(0, len-1);
+			
+			System.out.println(sb.toString());
+		}
+		
+	}
 
-            divideConquer(0,len-1);
-//            System.out.println("after divideConquer: "+sb.toString());
-            System.out.println(sb.toString());
+	private static void divide(int start, int end) {
+		int len = end-start+1;
+		if(len < 3) return;
+		int midStart = start+len/3;
+		int midEnd = start+(len/3)*2 - 1;
+		
+		divide(start, midStart-1);
+		for(int i=midStart;i<=midEnd;i++) {
+			sb.setCharAt(i, ' ');
+		}
+		
+		divide(midEnd+1,end);
+	}
 
-        }
-    }//main
-
-    static void divideConquer(int start, int end){
-        int len = end - start + 1;
-        if (len < 3) {
-            return;
-        }
-
-        int midStart = start + len / 3;
-        int midEnd = start + len / 3 * 2;
-
-        for (int i = midStart; i < midEnd; i++) {
-            sb.setCharAt(i, ' ');  // replace 대신 setCharAt 사용
-        }
-
-        divideConquer(start, midStart - 1);
-        divideConquer(midEnd, end);
-
-    }
 }
