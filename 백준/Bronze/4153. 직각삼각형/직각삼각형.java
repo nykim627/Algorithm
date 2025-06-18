@@ -1,36 +1,31 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
+	static StringBuilder sb;
 
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
-        int[] arr = new int[3];
-        while(true){
-            int max = 0;
-            int idx = 0;
-            for(int i=0;i<3;i++){
-                arr[i] = sc.nextInt();
-                if(max<arr[i]){
-                    max = arr[i];
-                    idx = i;
-                }
-            }
-
-            if(max==0){
-                break;
-            }else{
-                int a3 = max*max;
-                int a1_a2 = 0;
-                arr[idx]=0;
-                for(int i=0;i<3;i++){
-                    a1_a2 += arr[i]*arr[i];
-                }
-                if(a3==a1_a2){
-                    System.out.println("right");
-                }else{
-                    System.out.println("wrong");
-                }
-            }
-        }
-    }
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		sb = new StringBuilder();
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int a = Integer.parseInt(st.nextToken());
+		int b = Integer.parseInt(st.nextToken());
+		int c = Integer.parseInt(st.nextToken());
+		while(!(a==0 && b==0 && c==0)) {
+			int max = Math.max(Math.max(a, b),c);
+			int min = Math.min(Math.min(a, b),c);
+			int other = a+b+c-max-min;
+			if(min*min + other*other == max*max) sb.append("right\n");
+			else sb.append("wrong\n");
+			
+			st = new StringTokenizer(br.readLine());
+			a = Integer.parseInt(st.nextToken());
+			b = Integer.parseInt(st.nextToken());
+			c = Integer.parseInt(st.nextToken());
+		}
+		
+		System.out.println(sb.toString());
+	}
+	
 }
