@@ -1,47 +1,45 @@
 import java.io.*;
 import java.util.*;
 
-
 public class Main {
-    static int N;
-    static int M;
-    static int visited; //방문표시 위한 2진수
-    static int[] sel;
-    static StringBuilder sb;
+	static StringBuilder sb;
+	static int N, M;
+	static ArrayList<int[]> arrList;
+	static int[] res;
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-        StringTokenizer st = new StringTokenizer(br.readLine());
-
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        sel = new int[M]; //뽑은 M개 수 저장
-        int[] arr = new int[N];
-        for(int i=0;i<N;i++){
-            arr[i] = i+1;
-        }
-        sb = new StringBuilder();
-        comb(0,0);
-        System.out.println(sb.toString());
-
-        br.close();
-    }//main
-
-    static void comb(int n, int m){
-        if(m==M){ //sel에 M개 수 다 채워지면 출력
-            for(int e: sel){
-                sb.append(e).append(" ");
-            }
-            sb.append("\n");
-            return;
-        }
-        for(int i=n;i<N;i++){
-            sel[m] = i+1;
-            comb(i+1, m+1);
-        }
-
-
-    }
-
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		sb = new StringBuilder();
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		
+		arrList = new ArrayList();
+		res = new int[M];
+		comb(0,1);
+		
+		for(int[] e1: arrList) {
+			for(int e2: e1) {
+				sb.append(e2).append(" ");
+			}
+			sb.append("\n");
+		}
+		
+		System.out.println(sb.toString());
+	}
+	
+    //전형적인 조합
+	public static void comb(int idx, int start) {
+		if(idx==M) {
+			arrList.add(Arrays.copyOf(res, M));
+			return;
+		}
+		
+		for(int i=start;i<=N;i++) { //시작점을 제한하므로 방문배열 필요x
+			res[idx] = i;
+			comb(idx+1,i+1);
+		}
+	}
+	
 }
