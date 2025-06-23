@@ -1,16 +1,22 @@
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args){
-        Scanner sc = new Scanner(System.in);
-
-        long n = sc.nextLong();
-        long m = sc.nextLong();
-
-        if(n-m<0){
-            System.out.println(m-n);
-        }else{
-            System.out.println(n-m);
-        }
-    }
+	static StringBuilder sb;
+	static long N, M;
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		sb = new StringBuilder();
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		
+		long res = Math.abs(M-N);
+		sb.append(res);
+		
+		System.out.println(sb.toString());
+	}
+	
 }
