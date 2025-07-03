@@ -1,34 +1,32 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-//B11047 동전0
-//메모리
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int K = Integer.parseInt(st.nextToken());
-
-        int[] arr = new int[N];
-        for(int i=0;i<N;i++){
-            arr[i] = Integer.parseInt(br.readLine());
-        }
-
-        int cnt = 0;
-        for(int i=N-1;i>=0;i--){
-            while(arr[i]<=K){
-                K -= arr[i];
-                cnt++;
-            }
-        }
-
-        bw.write(cnt+"");
-
-        bw.flush();
-        bw.close();
-        br.close();
-    }
+	static StringBuilder sb;
+	
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		sb = new StringBuilder();
+		
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
+		int[] coins = new int[N];
+		for(int i=0;i<N;i++) {
+			coins[i] = Integer.parseInt(br.readLine());
+		}
+		
+		int cnt = 0;
+		for(int i=N-1;i>=0;i--) {
+			while(K>=coins[i]) {
+				K -= coins[i];
+				cnt++;
+			}
+		}
+		
+		sb.append(cnt);
+		System.out.println(sb.toString());
+	}
 }
