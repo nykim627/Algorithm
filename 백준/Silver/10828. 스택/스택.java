@@ -1,52 +1,39 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Stack;
 
 public class Main {
-    public static void main(String[] args) throws IOException{
-        // 문제 10828 해결을 위한 코드를 작성하세요.
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        ArrayList<Integer> arrList = new ArrayList<>();
-
-        int n = Integer.parseInt(br.readLine()); // 명령의 수 n
-        int i = 0;
-        while(i<n){
-            String input = br.readLine();
-            String[] order = input.split(" ");  // 공백을 기준으로 명령어와 값을 분리
-            switch(order[0]){
-                case("push"):
-                    int k = Integer.parseInt(order[1]);  // 'push' 명령어 뒤의 값을 읽어오고 int형으로 변환
-                    arrList.add(k); // 스택에 값 추가
-                    //System.out.println(arrList.get(arrList.size()-1));  // 확인용 출력 - 이후 주석 처리
-                    break;
-                case("pop"):
-                    if(arrList.isEmpty()){
-                        System.out.println(-1);
-                    }else{
-                        System.out.println(arrList.get(arrList.size()-1)); // 비어있지 않다면 가장 위의 값 출력 후
-                        arrList.remove(arrList.size()-1); // 가장 위의 값 삭제
-                    }
-                    break;
-                case("size"):
-                    System.out.println(arrList.size());
-                    break;
-                case("empty"):
-                    if(arrList.isEmpty()){
-                        System.out.println(1);
-                    }else{
-                        System.out.println(0);
-                    }
-                    break;
-                case("top"):
-                    if(arrList.isEmpty()){
-                        System.out.println(-1);
-                    }else{
-                        System.out.println(arrList.get(arrList.size()-1)); // 비어있지 않다면 가장 위의 값 출력
-                    }
-                    break;
-            }
-            i++;
-        }
-    }
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		
+		int T = Integer.parseInt(br.readLine());
+		Stack<Integer> stack = new Stack();
+		for(int i=0;i<T;i++) {
+			String[] arr = br.readLine().split(" ");
+			switch(arr[0]) {
+			case "push":
+				stack.push(Integer.parseInt(arr[1]));
+				break;
+			case "top":
+				if(stack.isEmpty()) sb.append("-1\n");
+				else sb.append(stack.peek()).append("\n");
+				break;
+			case "size":
+				sb.append(stack.size()).append("\n");
+				break;
+			case "pop":
+				if(stack.isEmpty()) sb.append("-1\n");
+				else sb.append(stack.pop()).append("\n");
+				break;
+			case "empty":
+				if(stack.isEmpty()) sb.append("1\n");
+				else sb.append("0\n");
+				break;
+			}
+		}
+		
+		System.out.println(sb.toString());
+	}
 }
