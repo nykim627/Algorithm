@@ -13,9 +13,9 @@ public class Main {
     static int[][][] visited; //거리저장배열
     static ArrayList<Point> ripe;
 
-    static int[][] dr = {{0,-1}, {0,1}, {0,0}, {0,0}, {0,0}, {0,0}};
-    static int[][] dc = {{0,0}, {0,0}, {0,-1}, {0,1}, {0,0}, {0,0}};
-    static int[][] dh = {{0,0}, {0,0}, {0,0}, {0,0}, {-1,0}, {1,0}};
+    static int[] dr = {-1, 1, 0, 0, 0, 0};
+    static int[] dc = {0, 0, -1, 1, 0, 0};
+    static int[] dh = {0, 0, 0, 0, -1, 1};
 
     static class Point{
         int h;
@@ -88,20 +88,14 @@ public class Main {
 
         while(!q.isEmpty()){
         	Point curr = q.poll();
-        	for(int d=0;d<4;d++) {
-        		int nr = curr.r + dr[d][1];
-        		int nc = curr.c + dc[d][1];
-        		if(nr<0||nc<0||nr>=N||nc>=M) continue;
-        		if(boxes[curr.h][nr][nc]==-1||visited[curr.h][nr][nc]!=-1) continue;
-        		visited[curr.h][nr][nc] = visited[curr.h][curr.r][curr.c] + 1;
-        		q.add(new Point(curr.h,nr,nc));
-        	}
-        	for(int d=4;d<6;d++) {
-        		int nh = curr.h + dh[d][0];
-        		if(nh<0||nh>=H) continue;
-        		if(boxes[nh][curr.r][curr.c]==-1||visited[nh][curr.r][curr.c]!=-1) continue;
-        		visited[nh][curr.r][curr.c] = visited[curr.h][curr.r][curr.c]+ 1;
-        		q.add(new Point(nh, curr.r, curr.c));
+        	for(int d=0;d<6;d++) {
+        		int nr = curr.r + dr[d];
+        		int nc = curr.c + dc[d];
+        		int nh = curr.h + dh[d];
+        		if(nr<0||nc<0||nh<0||nr>=N||nc>=M||nh>=H) continue;
+        		if(boxes[nh][nr][nc]==-1||visited[nh][nr][nc]!=-1) continue;
+        		visited[nh][nr][nc] = visited[curr.h][curr.r][curr.c] + 1;
+        		q.add(new Point(nh,nr,nc));
         	}
         }
     }
