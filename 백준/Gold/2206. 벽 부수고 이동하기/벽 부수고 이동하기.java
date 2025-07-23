@@ -40,9 +40,9 @@ public class Main {
         map = new boolean[N][M]; //(0,0) ~ (N-1, M-1)로 생각하기
         
         for(int r=0;r<N;r++) {
-        	String str = br.readLine();
+        	char[] lines = br.readLine().toCharArray();
         	for(int c=0;c<M;c++) {
-        		char tmp = str.charAt(c);
+        		char tmp = lines[c];
         		if(tmp=='1') map[r][c]=true; //벽인 경우만 true로 바꿈
         	}
         }
@@ -54,14 +54,14 @@ public class Main {
     }
 
 	private static int bfs() {
-		PriorityQueue<State> pq = new PriorityQueue();
+		Queue<State> q = new LinkedList(); //pq 쓸 필요없음 
 		boolean[][][] visited = new boolean[N][M][2]; //0:안부숨, 1:부숨
-		pq.add(new State(0,0,1,false)); //시작하는 칸부터 거리 1
+		q.add(new State(0,0,1,false)); //시작하는 칸부터 거리 1
 		visited[0][0][0] = true; //벽부수지 않고 방문
 		
 		
-		while(!pq.isEmpty()) {
-			State curr = pq.poll();
+		while(!q.isEmpty()) {
+			State curr = q.poll();
 			if(curr.r==N-1&&curr.c==M-1) return curr.cost;
 			
 			for(int d=0;d<4;d++) {
@@ -71,12 +71,12 @@ public class Main {
 				if(map[nr][nc]) { //벽이면
 					if(!curr.broke&&!visited[nr][nc][1]) { //벽 아직 안부숨 & 다음방문장소를 벽부수지않고 방문한 적이 아직 없음
 						visited[nr][nc][1] = true;
-						pq.add(new State(nr,nc,curr.cost+1,true));
+						q.add(new State(nr,nc,curr.cost+1,true));
 					}
 				}else {
 					if(visited[nr][nc][curr.broke ? 1 : 0]) continue;
 					visited[nr][nc][curr.broke ? 1 : 0] = true;
-					pq.add(new State(nr,nc,curr.cost+1,curr.broke));
+					q.add(new State(nr,nc,curr.cost+1,curr.broke));
 				}
 				
 			}
