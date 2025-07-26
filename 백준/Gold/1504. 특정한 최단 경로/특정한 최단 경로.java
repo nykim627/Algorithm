@@ -45,21 +45,29 @@ public class Main{
         int A = Integer.parseInt(st.nextToken());
         int B = Integer.parseInt(st.nextToken());
         
-        int res1 = dijkstra(1,A) + dijkstra(A,B) + dijkstra(B,N); //1->A->B->N
-        if(dijkstra(1,A)==-1||dijkstra(A,B)==-1||dijkstra(B,N)==-1) res1 = -1; // 세 경로 중 하나만 불가능이어도 전체가 불가능
-        int res2 = dijkstra(1,B) + dijkstra(B,A) + dijkstra(A,N); //1->B->A->N
-        if(dijkstra(1,B)==-1||dijkstra(B,A)==-1||dijkstra(A,N)==-1) res2 = -1;
+        int d1A = dijkstra(1, A);
+        int dAB = dijkstra(A, B);
+        int dBN = dijkstra(B, N);
+
+        int d1B = dijkstra(1, B);
+        int dBA = dijkstra(B, A);
+        int dAN = dijkstra(A, N);
+
+        //1->A->B->N
+        int res1 = (d1A == -1 || dAB == -1 || dBN == -1) ? -1 : d1A + dAB + dBN; // 세 경로 중 하나만 불가능이어도 전체가 불가능
+        //1->B->A->N
+        int res2 = (d1B == -1 || dBA == -1 || dAN == -1) ? -1 : d1B + dBA + dAN;
         
 //        System.out.println(res1+" "+res2);
         
-        int finalRes = res1==-1||res2==-1 ? Math.max(res1, res2) : Math.min(res1, res2); //두 결과 중 하나가 불가능이라면 나머지 하나가 최소경로. 둘다 불가능이라면 -1.
+        int finalRes = (res1==-1||res2==-1) ? Math.max(res1, res2) : Math.min(res1, res2); //두 결과 중 하나가 불가능이라면 나머지 하나가 최소경로. 둘다 불가능이라면 -1.
         if(finalRes==-1) System.out.println(-1); //둘 다 불가능
         else System.out.println(finalRes);
         
     }
     
     static int dijkstra(int start, int end) {
-    	PriorityQueue<Edge> pq = new PriorityQueue();
+    	PriorityQueue<Edge> pq = new PriorityQueue(); //start에서 특정노드(e.to)까지 걸리는 최소거리의 간선을 만들어서 pq에 저장!!
     	int[] dist = new int[N+1];
     	Arrays.fill(dist, INF);
     	
@@ -74,7 +82,7 @@ public class Main{
     		}
     		
     		for(Edge e: edges[curr.to]) {
-    			if(dist[e.to] > dist[curr.to]+ e.cost) {  //등호 포함 여부 확인하기
+    			if(dist[e.to] > dist[curr.to]+ e.cost) {  //등호 포함 여부 확인하기 -> '>'가 더 안정적 (중복 push 방지)
     				dist[e.to] = dist[curr.to] + e.cost;  
     				pq.offer(new Edge(e.to, dist[e.to]));
     			}
