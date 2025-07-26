@@ -6,6 +6,22 @@ import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+/*
+** 기본 다익스트라 알고리즘 시간복잡도:
+=> 우선순위 큐 기반 구현 → O((V + E) * log V)
+- V는 정점 수 (N ≤ 800)
+- E는 간선 수 (최대 200,000)
+- log V는 PriorityQueue의 정렬 비용
+
+** 각 dijkstra()의 최대 시간복잡도는:
+-> O((V + E) * log V) = O((800 + 200,000) * log 800) ≈ O(200,800 * 10) = 약 2,000,000
+
+** 6번 호출하므로:
+-> 총 시간복잡도 = 6 * O((V + E) * log V) ≈ 6 * 2,000,000 = 약 12,000,000
+
+ */
+
+
 public class Main{
 	static int N;
 	static int INF = Integer.MAX_VALUE;
