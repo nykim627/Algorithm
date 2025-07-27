@@ -1,95 +1,109 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main {
-	static int N, K, R;
+public class Main{
+	static List<Pos>[][] roads;
+	static int N, K, R; //정사각형 목초지 N×N (2 ≤ N ≤ 100), 소 K마리, 길 R개
+	static Pos[] cows;
 	static int[] dr = {-1,1,0,0};
 	static int[] dc = {0,0,-1,1};
-	static boolean[][] visited;
-	static boolean[][] map;
-	static int[][] cows;
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringBuilder sb = new StringBuilder();
+	
+	static class Pos{
+		int r;
+		int c;
 		
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken());
-		K = Integer.parseInt(st.nextToken());
-		R = Integer.parseInt(st.nextToken());
-		
-		map = new boolean[2*N][2*N];  //0~2N-1까지. 0은 없다고 생각하기
-		visited = new boolean[2*N][2*N];   //0~2N-1까지. 0은 없다고 생각하기
-		for(int i=0;i<R;i++) {
-			st = new StringTokenizer(br.readLine());
-			int r = 2*Integer.parseInt(st.nextToken())-1;
-			int c = 2*Integer.parseInt(st.nextToken())-1;
-			int r2 = 2*Integer.parseInt(st.nextToken())-1;
-			int c2 = 2*Integer.parseInt(st.nextToken())-1;
-			map[(r+r2)/2][(c+c2)/2] = true; //길
+		public Pos(int r, int c) {
+			this.r = r;
+			this.c = c;
 		}
-		
-		for(int i=2;i<2*N-1;i+=2) {
-			for(int j=2;j<2*N-1;j+=2) {
-				int subcnt = 0;
-				for(int d=0;d<4;d++) {
-					int nr = i + dr[d];
-					int nc = j + dc[d];
-					if(map[nr][nc]) subcnt++;
-				}
-				if(subcnt>=2) map[i][j] = true; //길로만들어
-			}
-		}
-		
-		cows = new int[K][2]; //0~K-1까지
-		for(int i=0;i<K;i++) {
-			st = new StringTokenizer(br.readLine());
-			int r = 2*Integer.parseInt(st.nextToken())-1;
-			int c = 2*Integer.parseInt(st.nextToken())-1;
-			cows[i] = new int[] {r,c};
-		}
-		
-//		System.out.println(Arrays.deepToString(map));
-//		System.out.println(Arrays.deepToString(cows));
-		
-		int cnt = 0;
-		for(int i=0;i<K-1;i++) {
-			for(int j=i+1;j<K;j++) {
-				visited = new boolean[2*N][2*N]; //방문배열 초기화
-				boolean res = bfs(cows[i], cows[j]);
-				if(!res) cnt++; //길을 건너야만 만날수 있는 소의 쌍
-//				System.out.println(cnt);
-			}
-		}
-		
-//		bfs(new int[] {3,3}, new int[] {3,5});
-		sb.append(cnt);
-		System.out.println(sb.toString());
-		
 	}
-	private static boolean bfs(int[] start, int[] end) {
-		Queue<int[]> q = new LinkedList();
-		q.add(start);
-		visited[start[0]][start[1]] = true;
+	
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        R = Integer.parseInt(st.nextToken());
+        
+        //각 칸마다 연결되어 있는 길 입력
+        roads = new ArrayList[N+1][N+1];
+        for(int i=1;i<=N;i++) {
+        	for(int j=1;j<=N;j++) {
+        		roads[i][j] = new ArrayList();
+        	}
+        }
+        
+        for(int i=0;i<R;i++) {
+        	st = new StringTokenizer(br.readLine());
+        	int r1 = Integer.parseInt(st.nextToken());
+        	int c1 = Integer.parseInt(st.nextToken());
+        	int r2 = Integer.parseInt(st.nextToken());
+        	int c2 = Integer.parseInt(st.nextToken());
+        	roads[r1][c1].add(new Pos(r2,c2));
+        	roads[r2][c2].add(new Pos(r1,c1));
+        }
+        
+        //소 위치 입력
+        cows = new Pos[K];
+        for(int i=0;i<K;i++) {
+        	st = new StringTokenizer(br.readLine());
+        	int r1 = Integer.parseInt(st.nextToken());
+        	int c1 = Integer.parseInt(st.nextToken());
+        	cows[i] = new Pos(r1,c1);
+        }
+        
+        //각 소마다 bfs 실행
+        int sum = 0;
+        for(int i=0;i<K;i++) {
+        	sum += bfs(cows[i]);
+        }
+        
+        //현재 sum은 a기준 b못만남 + b기준 a못만남 둘 다 있으므로 나누기 2해줘야 함
+        sum /= 2;
+        
+        System.out.println(sum);
+        
+	}
+
+	private static int bfs(Pos pos) {
+		Queue<Pos> q = new LinkedList();
+		boolean[][] visited = new boolean[N+1][N+1];
+		q.add(pos);
+		visited[pos.r][pos.c]= true;
 		
 		while(!q.isEmpty()) {
-			int[] curr = q.poll();
-//			System.out.println(Arrays.toString(curr));
-			if(curr[0]==end[0]&&curr[1]==end[1]) return true; //길을 안건너도 만날 수 있음
-			
+			Pos curr = q.poll();
 			for(int d=0;d<4;d++) {
-				int nr = curr[0] + dr[d];
-				int nc = curr[1] + dc[d];
-				if(nr<=0 || nc<=0 || nr>(2*N-1) || nc>(2*N-1)) continue;
-				if(visited[nr][nc] || map[nr][nc]) continue;
+				int nr = curr.r + dr[d];
+				int nc = curr.c + dc[d];
+				if(nr<1||nr>N||nc<1||nc>N) continue;
+				if(isRoad(curr,nr,nc)) continue;
+				if(visited[nr][nc]) continue;
 				visited[nr][nc] = true;
-				q.add(new int[] {nr,nc});
+				q.add(new Pos(nr,nc));
 			}
+		}
+		
+		int sum = 0;
+		for(int i=0;i<K;i++) {
+			if(!visited[cows[i].r][cows[i].c]) sum++;
+		}
+		
+		return sum;
+	}
+
+	private static boolean isRoad(Pos curr, int nr, int nc) {
+		for(Pos e: roads[curr.r][curr.c]) {
+			if(e.r==nr&&e.c==nc) return true;
 		}
 		return false;
 	}
+    
 }
