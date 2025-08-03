@@ -61,13 +61,18 @@ class Main {
     		}
     		Arrays.sort(ends); //목적지 후보 배열 오름차순 정렬
     		
+    		int[] distS = dijkstra(s);
+    		int[] distG = dijkstra(g);
+    		int[] distH = dijkstra(h);
+//    		System.out.println(distG[h]+"=="+distH[g]);
+    		
     		for(int i=0;i<t;i++) {
-    			int total = dijkstra(s,ends[i]);
-    			int SG = dijkstra(s, g);
-    			int GH = dijkstra(g, h);
-    			int HE = dijkstra(h, ends[i]);
-    			int SH = dijkstra(s, h);
-    			int GE = dijkstra(g, ends[i]);
+    			int total = distS[ends[i]];
+    			int SG = distS[g];
+    			int GH = distG[h];
+    			int HE = distH[ends[i]];
+    			int SH = distS[h];
+    			int GE = distG[ends[i]];
     			if((total==SG+GH+HE)||(total==SH+GH+GE)){
     				sb.append(ends[i]).append(" ");
     			}
@@ -80,7 +85,7 @@ class Main {
     	System.out.println(sb.toString());
     }
 
-	private static int dijkstra(int start, int end) {
+	private static int[] dijkstra(int start) {
 		PriorityQueue<Edge> pq = new PriorityQueue(); //간선 저장 pq
 		pq.add(new Edge(start,0, false, false));
 		int[] dist = new int[n+1];
@@ -89,9 +94,10 @@ class Main {
 		
 		while(!pq.isEmpty()) {
 			Edge curr = pq.poll();
-			if(curr.to==end) {
-				return dist[end];
-			}
+			
+			//꺼낸 경로의 거리보다 이미 더 짧은 거리로 방문한 적이 있다면, 지금 꺼낸 경로는 무시
+			if(curr.cost>dist[curr.to]) continue; 
+			
 			for(Edge e: edges[curr.to]) {
 				if(dist[e.to] > dist[curr.to]+e.cost) {
 					dist[e.to] = dist[curr.to]+e.cost; //최소값 갱신
@@ -106,6 +112,6 @@ class Main {
 			}
 		}
 		
-		return -1;
+		return dist;
 	}
 }
