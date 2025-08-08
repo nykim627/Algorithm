@@ -6,7 +6,8 @@ import java.util.Arrays;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-//2차원 다익스트라
+//상어가 있는 칸을 먼저 큐에 넣어두고 그 칸들부터 꺼내면서 bfs 돌기 + 방문표시
+//=> 상어없이 방문한 칸은 가장 가까운 상어와의 최단거리가 저장됨
 class Main {
 	static int N, M;
 	static boolean[][] arr;
@@ -21,40 +22,25 @@ class Main {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         arr = new boolean[N][M];
+        Queue<int[]> q = new ArrayDeque();
+        int[][] dist = new int[N][M];
+		for(int r=0;r<N;r++) {
+			Arrays.fill(dist[r], -1);
+		}
+		
+		//bfs
         for(int i=0;i<N;i++) {
         	st = new StringTokenizer(br.readLine());
         	for(int j=0;j<M;j++) {
         		arr[i][j] = Integer.parseInt(st.nextToken()) == 0 ? false : true;
+        		if(arr[i][j]) {
+        			q.add(new int[] {i,j});
+        			dist[i][j] = 0;
+        		}
         	}
         }
-        
-        int maxSafe = 0;
-        for(int i=0;i<N;i++) {
-        	for(int j=0;j<M;j++) {
-        		if(arr[i][j]) continue;
-        		int safeDist = bfs(i,j);
-        		maxSafe = Math.max(maxSafe, safeDist);
-        	}
-        }
-        
-        System.out.println(maxSafe);
-    }
-    
-	private static int bfs(int i, int j) {
-		Queue<int[]> q = new ArrayDeque();
-		q.add(new int[] {i,j});
-		int[][] dist = new int[N][M];
-		for(int r=0;r<N;r++) {
-			for(int c=0;c<M;c++) {
-				dist[r][c] = -1;
-			}
-//			Arrays.fill(dist, -1);
-		}
-		dist[i][j] = 0;
-		
 		while(!q.isEmpty()) {
 			int[] curr = q.poll();
-			if(arr[curr[0]][curr[1]]) return dist[curr[0]][curr[1]];
 			for(int d=0;d<8;d++) {
 				int nr = curr[0] + dr[d];
 				int nc = curr[1] + dc[d];
@@ -64,6 +50,16 @@ class Main {
 				q.add(new int[] {nr,nc});
 			}
 		}
-		return 0;
-	}
+        
+        int maxSafe = 0;
+        for(int i=0;i<N;i++) {
+        	for(int j=0;j<M;j++) {
+        		if(arr[i][j]) continue;
+        		maxSafe = Math.max(maxSafe, dist[i][j]);
+        	}
+        }
+        
+        System.out.println(maxSafe);
+    }
+    
 }
