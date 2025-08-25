@@ -20,6 +20,7 @@ public class Main {
         }
     }
 
+    //bfs 칸 상태
     static class Pos implements Comparable<Pos>{
         int x, y, dist;
         Pos(int x, int y, int dist){
@@ -37,84 +38,72 @@ public class Main {
 
     //먹을 수 있는 물고기가 있는 칸인지 체크
     static Pos check(State state){
-        Queue<int[]> tmpQ = new LinkedList<>();
+        Queue<int[]> q = new LinkedList<>();
         PriorityQueue<Pos> pq = new PriorityQueue<>();
-        tmpQ.add(new int[]{state.x,state.y});
+        q.add(new int[]{state.x,state.y});
         int[][] visited = new int[N][N];
         for(int i=0;i<N;i++){
             Arrays.fill(visited[i], -1);
         }
         visited[state.x][state.y] = 0;
 
-        while(!tmpQ.isEmpty()){
-            int[] curr = tmpQ.poll();
+        while(!q.isEmpty()){
+            int[] curr = q.poll();
             //물고기가 있고 상어크기보다 작으면 먹을 수 있으므로 해당 칸 리턴
             if(map[curr[0]][curr[1]]>0 && map[curr[0]][curr[1]]<state.size) {
-//                System.out.println("먹을 수 있는 물고기 위치: "+curr[0]+" "+curr[1]);
-//                System.out.println("거리: "+visited[curr[0]][curr[1]]);
                 pq.offer(new Pos(curr[0], curr[1], visited[curr[0]][curr[1]]));
             }
             for(int d=0;d<4;d++) {
                 int nr = curr[0] + dr[d];
                 int nc = curr[1] + dc[d];
                 if(nr>=N||nc>=N||nr<0||nc<0) continue; //범위 초과 주의
-                if(map[nr][nc]>state.size) continue; //상어크기보다 작은 물고기가 있는 칸은 접근 불가
+                if(map[nr][nc]>state.size) continue; //상어크기보다 큰 물고기가 있는 칸은 접근 불가
                 if(visited[nr][nc]!=-1) continue; //방문한 칸은 패스
                 visited[nr][nc] = visited[curr[0]][curr[1]] + 1;
-//                System.out.println("nr&nc: "+nr+" "+nc);
-                tmpQ.offer(new int[]{nr,nc});
+                q.offer(new int[]{nr,nc});
             }
         }
-        if(pq.isEmpty()){
-            //먹을 수 있는 물고기가 있는 칸 없음
-            return new Pos(-1,-1,-1); //x=-1,y=-1,dist=-1
-        }else{
-            //있으면 거리 짤음 -> 가장 위 -> 가장 왼쪽 순으로 가장 먼저 있는 칸을 선택
-            return pq.poll();
-        }
+        return pq.isEmpty() ? null : pq.poll();
     }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
 
         N = Integer.parseInt(br.readLine()); //공간의 크기 n
         map = new int[N][N];
 
-        //변경되는 상어 위치 넣을 큐
-        Queue<State> q = new LinkedList<>();
+        State shark = new State(-1,-1,2,0);
         //map 채우기
         for(int i=0;i<N;i++){
             StringTokenizer st = new StringTokenizer(br.readLine());
             for(int j=0;j<N;j++){
                 map[i][j] = Integer.parseInt(st.nextToken());
-                if(map[i][j] == 9) q.add(new State(i,j,2,0));
+                if(map[i][j] == 9) {
+                    shark.x = i;
+                    shark.y = j;
+                    map[i][j] = 0; //상어위치는 빈칸으로 놔두고 shark로만 추적
+                }
             }
         }
 
         //상어위치 바뀌지 않을때까지 반복
         int totalTime = 0; //총시간
-        while(!q.isEmpty()){
-            State curr = q.poll();
-            Pos res = check(curr); //먹을 수 있는 물고기 있는지 췤
-            if(res.x==-1&&res.y==-1&&res.dist==-1) break; //먹을 수 있는 물고기 없음.
+        while(true){
+            Pos res = check(shark); //먹을 수 있는 물고기 있는지 췤
+            if(res==null) break; //먹을 수 있는 물고기 없음.
             totalTime += res.dist; //먹을 수 있는 물고기까지의 거리를 총시간에 더하기
-            map[res.x][res.y] = 9; //물고기 없어진 위치의 값을 상어 위치인 9으로 변경
-            map[curr.x][curr.y] = 0; //기존 상어 위치를 0으로 변경
-            curr.cnt++; //상어가 먹은 물고기 수 +1 증가
-            if(curr.cnt==curr.size){
-                curr.size++; //상어크기 +1 하고
-                curr.cnt = 0;  //상어가 먹은 물고기 수 초기화 (이건 체크해봐야함)
+            map[res.x][res.y] = 0; //물고기 없어진 위치의 값을 0으로 변경
+            shark.cnt++; //상어가 먹은 물고기 수 +1 증가
+            if(shark.cnt==shark.size){
+                shark.size++; //상어크기 +1 하고
+                shark.cnt = 0;  //상어가 먹은 물고기 수 초기화
             }
-//            System.out.println("상어 크기: "+curr.size+" & 상어가 먹은 물고기수: "+curr.cnt);
-//            for(int i=0;i<N;i++){
-//                System.out.println(Arrays.toString(map[i]));
-//            }
-            q.offer(new State(res.x,res.y,curr.size,curr.cnt)); //새 상어 상태 큐에 넣음
+            //상어 위치 갱신
+            shark.x = res.x;
+            shark.y = res.y;
         }
 
-        sb.append(totalTime);
-        System.out.println(sb.toString());
+        System.out.println(totalTime);
 
     }
 }
