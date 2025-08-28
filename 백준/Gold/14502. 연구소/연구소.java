@@ -6,20 +6,22 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-//시간복잡도 O(n) : 8^2(첫번째벽) * 8^2(두번째벽) * 8^2(세번째벽) * 8^2(bfs)
+//백트래킹 -> 브루트포스보다 시간복잡도 훨씬 줄어듦
 class Main {
 	static int[] dr = {-1,1,0,0};
 	static int[] dc = {0,0,-1,1};
-	static int N, M;
+	static int N, M, ans;
+	static ArrayList<Pos> virus;
+	static int[][] board;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
-		ArrayList<Pos> virus = new ArrayList<>();
+		virus = new ArrayList<>();
 		
-		int[][] board = new int[N][M];
+		board = new int[N][M];
 		for(int i=0;i<N;i++) {
 			st = new StringTokenizer(br.readLine());
 			for(int j=0;j<M;j++) {
@@ -28,29 +30,46 @@ class Main {
 			}
 		}
 		
-		int ans = 0;
-		for(int i=0;i<N*M;i++) {
-			int r1 = i/M;
-			int c1 = i%M;
-			if(board[r1][c1]!=0) continue;
-			for(int j=i+1;j<N*M;j++) {
-				int r2 = j/M;
-				int c2 = j%M;
-				if(board[r2][c2]!=0) continue;
-				for(int k=j+1;k<N*M;k++) {
-					int r3 = k/M;
-					int c3 = k%M;
-					if(board[r3][c3]!=0) continue;
-					int cnt = check(r1,c1,r2,c2,r3,c3,board,virus);
-					ans = Math.max(cnt, ans);
-				}
-			}
-		}
+		//dfs+백트래킹으로 벽 3개를 조합
+		buildWalls(0,0);
 		
 		System.out.println(ans);
 		
 	}
 	
+	private static void buildWalls(int count, int start) {
+		//재귀 종료 조건
+		if(count==3) {
+			int[][] b = new int[N][M];
+			for(int i=0;i<N;i++) b[i] = board[i].clone();
+			
+			bfs(b);
+			
+			int cnt = 0;
+			for(int i=0;i<N;i++) {
+				for(int j=0;j<M;j++) {
+					if(b[i][j]==0) cnt++;
+//					System.out.println(cnt);
+				}
+			}
+			ans = Math.max(ans, cnt);
+			return;
+		}
+		
+		//dfs 재귀
+		for(int i=start;i<N*M;i++) {
+			int r = i/M;
+			int c = i%M;
+			if(board[r][c]==0) {
+				board[r][c] = 1; //벽으로 만들어봄
+				buildWalls(count+1, i+1);
+				board[r][c] = 0; //백트래킹(롤백)
+			}
+		}
+		
+		
+	}
+
 	static class Pos{
 		int r,c;
 		Pos(int r, int c){
@@ -59,32 +78,14 @@ class Main {
 		}
 	}
 
-	private static int check(int r1, int c1, int r2, int c2, int r3, int c3, int[][] board, ArrayList<Pos> virus) {
-		int[][] b = new int[N][M];
-		for(int i=0;i<N;i++) {
-			b[i] = board[i].clone();
-		}
-		b[r1][c1] = 1;
-		b[r2][c2] = 1;
-		b[r3][c3] = 1;
-		for(Pos e: virus) {
-			bfs(e, b);
-		}
-		int cnt = 0;
-		for(int i=0;i<N;i++) {
-			for(int j=0;j<M;j++) {
-				if(b[i][j]==0) cnt++;
-//				System.out.println(cnt);
-			}
-		}
-		return cnt;
-	}
-
-	private static void bfs(Main.Pos e, int[][] board) {
+	private static void bfs(int[][] board) {
 		Queue<Pos> q = new LinkedList<>();
-		q.add(e);
 		boolean[][] visited = new boolean[N][M];
-		visited[e.r][e.c] = true;
+		
+		for(Pos e: virus) {
+			q.add(e);
+			visited[e.r][e.c] = true;
+		}
 		
 		while(!q.isEmpty()) {
 			Pos curr = q.poll();
