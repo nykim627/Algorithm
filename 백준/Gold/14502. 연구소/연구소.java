@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+//시간복잡도 O(n) : 8^2(첫번째벽) * 8^2(두번째벽) * 8^2(세번째벽) * 8^2(bfs)
 class Main {
 	static int[] dr = {-1,1,0,0};
 	static int[] dc = {0,0,-1,1};
