@@ -39,37 +39,22 @@ class Main {
 		int maxCnt = 0;
 		
 		for(int h=min-1;h<=max;h++) {
-			//높이 h일때 잠기는 칸 모두 확인 후 방문표시
-			Queue<Pos> q = new LinkedList<>();
-			boolean[][] water = new boolean[N][N];
+			//높이마다 방문배열 초기화
+			visited = new boolean[N][N];
+			
+			//높이 h일때 잠기는 칸 모두 방문표시
 			for(int i=0;i<N;i++) {
 				for(int j=0;j<N;j++) {
-					if(board[i][j]<=h) {
-						q.add(new Pos(i,j));
-						water[i][j] = true;
-					}
-				}
-			}
-			while(!q.isEmpty()) {
-				Pos curr = q.poll();
-				for(int d=0;d<4;d++) {
-					int nr = curr.r + dr[d];
-					int nc = curr.c + dc[d];
-					if(nr<0||nc<0||nr>=N||nc>=N) continue;
-					if(water[nr][nc]) continue;
-					if(board[nr][nc]>h) continue;
-					water[nr][nc] = true;
-					q.add(new Pos(nr,nc));
+					if(board[i][j]<=h) visited[i][j] = true;
 				}
 			}
 
 			//방문안한 그룹개수 세기
 			int cnt = 0;
-			visited = new boolean[N][N];
 			for(int i=0;i<N;i++) {
 				for(int j=0;j<N;j++) {
-					if(!water[i][j] && !visited[i][j]) {
-						bfs(i,j,water, visited);
+					if(!visited[i][j]) {
+						bfs(i,j, visited);
 						cnt++;
 					}
 				}
@@ -81,7 +66,7 @@ class Main {
 		System.out.println(maxCnt);
 	}
 
-	private static void bfs(int i, int j, boolean[][] water, boolean[][] visited) {
+	private static void bfs(int i, int j, boolean[][] visited) {
 		Queue<Pos> q2 = new LinkedList<>();
 		q2.add(new Pos(i,j));
 		
@@ -93,7 +78,6 @@ class Main {
 				int nr = curr.r + dr[d];
 				int nc = curr.c + dc[d];
 				if(nr<0||nc<0||nr>=N||nc>=N) continue;
-				if(water[nr][nc]) continue; //물로 차있으면 패스
 				if(visited[nr][nc]) continue;
 				visited[nr][nc] = true;
 				q2.add(new Pos(nr,nc));
