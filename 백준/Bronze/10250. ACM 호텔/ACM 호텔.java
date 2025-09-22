@@ -1,29 +1,22 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.io.*;
 
-public class Main {
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int t = sc.nextInt();
-        for(int i=0;i<t;i++) {
-            int h = sc.nextInt();
-            int w = sc.nextInt();
-            int n = sc.nextInt();
-
-            int[][] arr = new int[h][w];
-
-            String first = Integer.toString(n%h==0 ? h : n%h);
-            String last = "";
-            if(n%h==0){
-                last = n/h<10 ? "0"+Integer.toString(n/h) : Integer.toString(n/h);
-            }else {
-                last = n / h + 1 < 10 ? "0" + Integer.toString(n / h + 1) : Integer.toString(n / h + 1);
-            }
-            System.out.println(first+last);
+class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
+        for(int tc=1;tc<=T;tc++){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int H = Integer.parseInt(st.nextToken());
+            int W = Integer.parseInt(st.nextToken());
+            int N = Integer.parseInt(st.nextToken());
+            int MM = N%H==0 ? N/H : N/H+1;
+            System.out.print(N%H==0 ? H : N%H);
+            System.out.print(MM<10 ? "0"+MM : MM);
+            System.out.println();
         }
 
-
-
     }
-
 }
