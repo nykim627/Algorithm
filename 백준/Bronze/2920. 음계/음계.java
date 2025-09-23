@@ -1,29 +1,23 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+import java.io.*;
 
-public class Main {
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int[] arr = new int[8];
-        for(int i=0;i<8;i++) {
-            arr[i] = sc.nextInt();
+class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        boolean asc = true;
+        boolean desc = true;
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int prev = Integer.parseInt(st.nextToken());
+        for(int i=0;i<7;i++){
+            int curr = Integer.parseInt(st.nextToken());
+            if(prev<curr) desc = false;
+            if(prev>curr) asc = false;
+            prev = curr;
         }
-        int cnt = 0;
-        for(int i=0;i<8;i++) {
-            if(arr[i]==i+1){
-                cnt+=1;
-            }else if(arr[i]==8-i){
-                cnt-=1;
-            }
-        }
-        if(cnt==8){
-            System.out.println("ascending");
-        }else if(cnt==-8){
-            System.out.println("descending");
-        }else{
-            System.out.println("mixed");
-        }
-
+        if(desc) System.out.println("descending");
+        else if(asc) System.out.println("ascending");
+        else System.out.println("mixed");
     }
-
 }
