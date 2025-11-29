@@ -6,4 +6,4 @@
 -- https://velog.io/@hskhyl/SQL-%EA%B4%80%EB%A0%A8-%EC%9D%B4%EC%A7%84%EC%88%98-%ED%92%80%EC%9D%B4-%EC%A0%95%EB%A6%AC
 SELECT count(*) as count
 FROM ecoli_data
-WHERE genotype & 0b0101 > 0 AND genotype & 2 = 0
+WHERE genotype & BINARY(5) > 0 AND genotype & 2 = 0
